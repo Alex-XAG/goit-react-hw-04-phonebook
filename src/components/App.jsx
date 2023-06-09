@@ -13,32 +13,13 @@ export const App = () => {
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ]
   );
-
   const [filter, setFilter] = useState('');
-  const [inputName, setInputName] = useState('');
-  const [inputNumber, setInputNumber] = useState('');
 
   useEffect(() => {
     window.localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
 
-  const handleInputChange = ({ target }) => {
-    switch (target.name) {
-      case 'name':
-        setInputName(target.value);
-        break;
-      case 'number':
-        setInputNumber(target.value);
-        break;
-      default:
-        return;
-    }
-  };
-
-  const handleSubmit = evt => {
-    evt.preventDefault();
-    // const { name, number, contacts } = this.state;
-
+  const onSubmit = (inputName, inputNumber) => {
     if (contacts.find(contact => contact.name === inputName)) {
       alert(`${inputName} is already in your phonebook`);
     } else if (contacts.find(contact => contact.number === inputNumber)) {
@@ -49,8 +30,6 @@ export const App = () => {
         createContact({ name: inputName, number: inputNumber }),
       ]);
     }
-
-    evt.currentTarget.reset();
   };
 
   const createContact = data => {
@@ -72,7 +51,7 @@ export const App = () => {
   };
 
   const handleDeleteContact = id => {
-    setContacts(() => contacts.filter(contact => contact.id !== id));
+    setContacts(prevState => prevState.filter(contact => contact.id !== id));
   };
 
   return (
@@ -88,10 +67,7 @@ export const App = () => {
       }}
     >
       <h1>Phonebook</h1>
-      <ContactForm
-        handleInputChange={handleInputChange}
-        handleSubmit={handleSubmit}
-      />
+      <ContactForm onSubmit={onSubmit} />
 
       <h2>Contacts</h2>
       <Filter option={filter} handleFilter={handleFilter} />

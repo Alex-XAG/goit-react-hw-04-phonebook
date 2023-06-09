@@ -1,9 +1,34 @@
-import React from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Form, Label, Input, BtnForm } from './ContactForm.styled';
 
-export const ContactForm = ({ handleSubmit, handleInputChange }) => {
+export const ContactForm = ({ onSubmit }) => {
+  const [inputName, setInputName] = useState('');
+  const [inputNumber, setInputNumber] = useState('');
+
+  const handleInputChange = ({ target }) => {
+    switch (target.name) {
+      case 'name':
+        setInputName(target.value);
+        break;
+      case 'number':
+        setInputNumber(target.value);
+        break;
+      default:
+        return;
+    }
+  };
+
+  const handleSubmit = evt => {
+    evt.preventDefault();
+    // const { name, number, contacts } = this.state;
+
+    onSubmit(inputName, inputNumber);
+
+    evt.currentTarget.reset();
+  };
+
   return (
     <Form onSubmit={handleSubmit}>
       <Label htmlFor="name">Name</Label>
